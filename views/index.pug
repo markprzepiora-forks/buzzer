@@ -14,13 +14,13 @@ html
         img(src="/lets-play.png" class="main-image")
         h2="Let's play!"
         input(type='text' name='name' placeholder='Your name' required='required')
-        input(type='number' name='team' placeholder='Your team number' required='required')
+        input(type='hidden' value='1' name='team')
         button(type='submit')='Join!'
 
       div.view.js-joined.hidden
         button.js-buzzer.buzzer()='Buzz!!!'
         p.js-joined-info=""
-        button.js-edit.secondary='Change teams'
+        button.js-edit.secondary='Quit'
 
     script(src='/socket.io/socket.io.js')
     script(src='/join.js')
