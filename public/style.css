@@ -122,15 +122,38 @@ button:focus {
 .buzzer {
   height: 10em;
   font-size: 2em;
+}
+
+.buzzer-open {
+}
+
+.buzzer-open {
+  background-color: rgb(0, 204, 102);
+  color: white;
+}
+.buzzer-open:focus {
+  box-shadow: 0 0 0 3px #ABB7FF;
+}
+.buzzer-open:hover,
+.buzzer-open:active {
+  background-color: rgb(153, 255, 204);
+}
+
+.buzzer-closed {
   background-color: rgb(243, 175, 185);
   color: rgb(18, 30, 102);
 }
-.buzzer:focus {
+.buzzer-closed:focus {
   box-shadow: 0 0 0 3px #ABB7FF;
 }
-.buzzer:hover,
-.buzzer:active {
+.buzzer-closed:hover,
+.buzzer-closed:active {
   background-color: #e97284;
+}
+
+.buzzer:disabled {
+  opacity: 50%;
+  background-color: grey;
 }
 
 .secondary {

@@ -11,14 +11,16 @@ const title = 'Buffer Buzzer'
 let data = {
   users: new Set(),
   buzzes: new Set(),
+  buzzedUsers: new Set(),
+  open: false,
 }
 
 const getData = () => ({
   users: [...data.users],
-  buzzes: [...data.buzzes].map(b => {
-    const [ name, team ] = b.split('-')
-    return { name, team }
-  })
+  buzzes: [...data.buzzes].map(name => {
+    return { name: name, team: 'N/A' };
+  }),
+  open: data.open,
 })
 
 app.use(express.static('public'))
@@ -35,16 +37,38 @@ io.on('connection', (socket) => {
   })
 
   socket.on('buzz', (user) => {
-    data.buzzes.add(`${user.name}-${user.team}`)
-    io.emit('buzzes', [...data.buzzes])
-    console.log(`${user.name} buzzed in!`)
+    let alreadyBuzzed = data.buzzedUsers.has(user.id);
+    let isOpen = data.open;
+
+    data.buzzedUsers.add(user.id);
+
+    if (!alreadyBuzzed && isOpen) {
+      data.buzzes.add(user.name);
+    }
+
+    io.emit('buzzes', [...data.buzzes]);
+    console.log(`${user.name} buzzed in!`);
   })
 
-  socket.on('clear', () => {
-    data.buzzes = new Set()
-    io.emit('buzzes', [...data.buzzes])
-    console.log(`Clear buzzes`)
-  })
+  socket.on('open', () => {
+    data.buzzes = new Set();
+    data.open = true;
+
+    io.emit('buzzes', [...data.buzzes]);
+    io.emit('opened');
+    console.log(`Buzzer opened`);
+  });
+
+  socket.on('close', () => {
+    data.buzzes = new Set();
+    data.buzzedUsers = new Set();
+    data.open = false;
+
+    io.emit('buzzes', [...data.buzzes]);
+    io.emit('closed');
+    console.log(`Buzzer closed`);
+  });
+
 })
 
 server.listen(8090, () => console.log('Listening on 8090'))

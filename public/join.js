@@ -35,7 +35,14 @@ form.addEventListener('submit', (e) => {
 })
 
 buzzer.addEventListener('click', (e) => {
-  socket.emit('buzz', user)
+  socket.emit('buzz', user);
+  buzzer.disabled = true;
+
+  if (buzzer.classList.contains('buzzer-open')) {
+    buzzer.innerText = "Buzzed in";
+  } else {
+    buzzer.innerText = "Buzzed in too early";
+  }
 })
 
 editInfo.addEventListener('click', () => {
@@ -43,5 +50,18 @@ editInfo.addEventListener('click', () => {
   form.classList.remove('hidden')
   body.classList.remove('buzzer-mode')
 })
+
+socket.on('opened', () => {
+  buzzer.classList.remove('buzzer-closed');
+  buzzer.classList.add('buzzer-open');
+  buzzer.innerText = "BUZZ";
+});
+
+socket.on('closed', () => {
+  buzzer.classList.add('buzzer-closed');
+  buzzer.classList.remove('buzzer-open');
+  buzzer.innerText = "Don't buzz in yet";
+  buzzer.disabled = false;
+});
 
 getUserInfo()
