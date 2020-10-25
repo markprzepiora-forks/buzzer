@@ -13,7 +13,8 @@ html
       ol.js-buzzes
         each buzz in buzzes
           li=`${buzz.name}`
-      button.js-clear='Clear buzzes'
+      button.js-open='Open'
+      button.js-close='Close'
 
     script(src='/socket.io/socket.io.js')
     script(src='/host.js')

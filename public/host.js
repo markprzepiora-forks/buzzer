@@ -1,6 +1,8 @@
 const socket = io()
 const active = document.querySelector('.js-active')
 const buzzList = document.querySelector('.js-buzzes')
+const openButton = document.querySelector('.js-open')
+const closeButton = document.querySelector('.js-close')
 const clear = document.querySelector('.js-clear')
 
 socket.on('active', (numberActive) => {
@@ -9,15 +11,17 @@ socket.on('active', (numberActive) => {
 
 socket.on('buzzes', (buzzes) => {
   buzzList.innerHTML = buzzes
-    .map(buzz => {
-      const p = buzz.split('-')
-      return { name: p[0], team: p[1] }
+    .map(name => {
+      return { name: name, team: 'N/A' }
     })
     .map(user => `<li>${user.name}</li>`)
     .join('')
 })
 
-clear.addEventListener('click', () => {
-  socket.emit('clear')
-})
+openButton.addEventListener('click', () => {
+  socket.emit('open');
+});
 
+closeButton.addEventListener('click', () => {
+  socket.emit('close');
+});
